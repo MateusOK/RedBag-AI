@@ -5,6 +5,7 @@ from keras.api.models import Sequential
 from keras.api.layers import RandomFlip, RandomRotation, RandomZoom
 from keras.api.layers import Rescaling, Dense, Dropout, GlobalAveragePooling2D
 from keras.api.applications import VGG16
+from keras.api.callbacks import ProgbarLogger
 
 physical_devices = tf.config.list_physical_devices('GPU')
 if physical_devices:
@@ -80,3 +81,7 @@ model = Sequential([
 ])
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+num_epochs = 20
+
+history = model.fit(train_dataset, validation_data=validation_dataset, epochs=num_epochs, callbacks=[ProgbarLogger()])

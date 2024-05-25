@@ -85,3 +85,18 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 num_epochs = 20
 
 history = model.fit(train_dataset, validation_data=validation_dataset, epochs=num_epochs, callbacks=[ProgbarLogger()])
+
+model.save("RedBag-AI.h5")
+
+test_loss, test_acc = model.evaluate(test_dataset)
+
+print('Test accuracy:', test_acc)
+
+probabilities = model.predict(test_dataset)
+
+for i, probability in enumerate(probabilities):
+    filename = file_paths[i]
+    print(f'Image: {filename}')
+    for j, class_probability in enumerate(probability):
+        class_name = class_names[j]
+        print(f'  {class_name} probability: {class_probability * 100:.2f}%')

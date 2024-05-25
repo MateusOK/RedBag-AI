@@ -14,3 +14,11 @@ img_array = np.expand_dims(img_array, axis=0)
 img_array = preprocess_input(img_array)
 
 predictions = model.predict(img_array)
+
+class_names = ['healthy', 'unhealthy']
+
+predicted_class = class_names[np.argmax(predictions[0])]
+predicted_prob = np.max(predictions[0])
+
+print(f"Predicted class: {predicted_class}")
+print(f"Probability: {predicted_prob * 100:.2f}%")

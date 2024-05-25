@@ -3,6 +3,8 @@ import tensorflow as tf
 from keras.api.utils import image_dataset_from_directory
 from keras.api.models import Sequential
 from keras.api.layers import RandomFlip, RandomRotation, RandomZoom
+from keras.api.layers import Rescaling, Dense, Dropout, GlobalAveragePooling2D
+from keras.api.applications import VGG16
 
 physical_devices = tf.config.list_physical_devices('GPU')
 if physical_devices:
@@ -61,3 +63,20 @@ train_dataset = train_dataset.map(
 train_dataset = train_dataset.cache().prefetch(buffer_size=AUTOTUNE)
 validation_dataset = validation_dataset.cache().prefetch(buffer_size=AUTOTUNE)
 test_dataset = test_dataset.cache().prefetch(buffer_size=AUTOTUNE)
+
+num_classes = 2
+
+base_model = VGG16(input_shape=(img_height, img_width, 3), include_top=False, weights='imagenet')
+
+base_model.trainable = False
+
+model = Sequential([
+    Rescaling(1./255, input_shape=(img_height, img_width, 3)),
+    base_model,
+    GlobalAveragePooling2D(),
+    Dense(128, activation='relu'),
+    Dropout(0.5),
+    Dense(num_classes, activation='softmax')
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])

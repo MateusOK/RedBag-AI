@@ -82,7 +82,7 @@ model = Sequential([
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-num_epochs = 20
+num_epochs = 30
 
 history = model.fit(train_dataset, validation_data=validation_dataset, epochs=num_epochs, callbacks=[ProgbarLogger()])
 
